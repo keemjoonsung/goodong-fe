@@ -1,0 +1,48 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.repo-username {
+  font-weight: bold;
+}
+.repo-item {
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.repo-link {
+  text-decoration: none;
+  font-weight: bold;
+}
+.repo-item a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+.repo-header {
+  display: flex;
+  margin-top: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.repo-item a:hover {
+  text-decoration: none;
+}
+
+.btn-create {
+  display: inline-block;
+  background-color: #2ea44f;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-create:hover {
+  background-color: #22863a;
+}

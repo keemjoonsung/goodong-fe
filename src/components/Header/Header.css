@@ -1,0 +1,27 @@
+#header-frame {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 좌우 여백을 최대로 설정하여 요소 사이에 공간을 만듭니다. */
+    padding: 10px;
+    background-color: #24292e;
+}
+
+.button {
+    padding: 8px 16px;
+    margin: 5px;
+    border: none;
+    background-color: #6c757d;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #495057;
+}
+
+.user-info {
+    margin: 10px;
+    font-weight: bold;
+    color: #fff;
+}
