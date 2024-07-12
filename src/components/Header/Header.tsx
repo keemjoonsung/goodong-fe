@@ -1,14 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import {Modal} from 'react-bootstrap'
+import {Image, Modal} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import RegisterForm from '../RegisterForm/RegisterForm'
 import LoginForm from '../LoginForm/LoginForm'
 import './Header.css'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import api from '../../apis'
 
 const Header = () => {
   const [loginModal, setLoginModal] = useState(false)
+  const navigate = useNavigate()
+
+  const gotoSigninPage = () => {
+    navigate('/signin')
+  }
+
   const showLoginModal = () => {
     setLoginModal(true)
   }
@@ -54,16 +60,14 @@ const Header = () => {
   return (
     <div id={'header-frame'}>
       <Link to={'/'}>
-        <button className={'button'} id={'home-button'}>
-          Home
-        </button>
+        <Image src={'/img/Logo.png'} id={'goodong-logo'} height="60" />
       </Link>
       {!isLogin && (
         <span id={'regi-span'}>
           <button
             className={'button'}
             id={'signin-button'}
-            onClick={showLoginModal}>
+            onClick={gotoSigninPage}>
             Sign in
           </button>
           <button

@@ -1,0 +1,31 @@
+.main-background {
+  background-image: url('/img/main.jpg');
+  background-size: cover;
+  height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  color: #f7f7f7;
+}
+.blur {
+  background-color: #000;
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.search-bar {
+  max-width: 800px;
+  z-index: 1;
+}
+.main-background h1,
+.main-background p {
+  text-align: center;
+  z-index: 1;
+}
+.main-background h1 {
+  padding-top: 300px;
+}

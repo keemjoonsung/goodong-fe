@@ -22,9 +22,8 @@ const LoginForm = ({
 
     api
       .login(username, password)
-      .then(response => {
+      .then(token => {
         setMsg(SUCCESS)
-        const token = response.headers.getAuthorization?.toString() ?? ''
         localStorage.setItem('jwtToken', token)
         localStorage.setItem('username', username)
         if (token) {

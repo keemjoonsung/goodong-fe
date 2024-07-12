@@ -6,6 +6,7 @@ import MainPage from './pages/MainPage/MainPage'
 import RepositoryPage from './pages/RepositoryPage/RepositoryPage'
 import ModelPreviewPage from './pages/ModelPreviewPage/ModelPreviewPage'
 import CreateRepositoryPage from './pages/CreateRepositoryPage/CreateRepositoryPage'
+import SigninPage from './pages/SigninPage/SigninPage'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/signin" element={<SigninPage />} />
         <Route path="/:userID/repository" element={<RepositoryPage />} />
         <Route
           path="/:userID/repository/:postID"

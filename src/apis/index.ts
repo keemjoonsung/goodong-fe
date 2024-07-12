@@ -8,7 +8,12 @@ const instance = axios.create({
 })
 
 const login = (username: string, password: string) => {
-  return instance.post('/login', {username, password})
+  return instance.post('/login', {username, password}).then(response => {
+    console.log(response.headers['authorization'])
+    const token = response.headers['authorization'] ?? ''
+    if (token) instance.defaults.headers['authorization'] = token
+    return token
+  })
 }
 
 const checkToken = (token: string) => {
