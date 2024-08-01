@@ -1,0 +1,21 @@
+.signin-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 120px;
+}
+.signin-page img {
+  margin-bottom: 20px;
+}
+.signin-page h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.signin-page input {
+  margin-bottom: 10px;
+}
+.signin-page button {
+  margin-top: 20px;
+  width: 100%;
+}

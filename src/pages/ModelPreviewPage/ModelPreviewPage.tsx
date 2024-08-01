@@ -1,17 +1,17 @@
-import React, {useEffect, useState, Suspense, useRef} from 'react'
+import React, { useEffect, useState, Suspense, useRef } from 'react'
 import axios from 'axios'
-import {useParams} from 'react-router-dom'
-import {Canvas, useThree} from '@react-three/fiber'
-import {useLoader} from '@react-three/fiber'
+import { useParams } from 'react-router-dom'
+import { Canvas, useThree } from '@react-three/fiber'
+import { useLoader } from '@react-three/fiber'
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import {Environment, OrbitControls} from '@react-three/drei'
+import { Environment, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
-import {CopyToClipboard} from 'react-copy-to-clipboard/src'
+import { CopyToClipboard } from 'react-copy-to-clipboard/src'
 import './ModelPreviewPage.css'
-import {GLTFLoader} from 'three/examples/jsm/Addons.js'
+import { GLTFLoader } from 'three/examples/jsm/Addons.js'
 import api from '../../apis'
 
-const Model = ({url}: {url: string}) => {
+const Model = ({ url }: { url: string }) => {
   const [yPos, setYPos] = useState(0)
   const [xPos, setXPos] = useState(0)
   const gltf = useLoader(GLTFLoader, url) as any
@@ -59,34 +59,34 @@ const ModelPreviewPage = () => {
   const [postData, setPostData] = useState<{
     title: string
     content: string
-    fileUrl: string
   } | null>(null)
   const [modelCode, setModelCode] = useState('')
+  const [modelUrl, setModelUrl] = useState('')
   const params = useParams()
   const postId = params['postID']
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (postId: string) => {
       try {
-        const response = await api.getPost(postId ?? '')
-        console.log(response.data)
-        setPostData(response.data)
-        console.log('파일' + response.data.fileUrl)
-        setModelCode(response.data.fileUrl.match(/\/models\/([^\/]+)\//)[1])
+        const postResponse = await api.getPost(postId)
+        setPostData(postResponse.data)
+
+        const response = await api.downloadGLB(postId)
+        const blob = new Blob([response.data], { type: 'model/gltf-binary' })
+        const url = URL.createObjectURL(blob)
+        setModelUrl(url)
+        console.log(url)
       } catch (error) {
         console.error(error)
       }
     }
-
-    fetchData()
-  }, [params]) // Only run useEffect when `params` changes
+    if (postId) fetchData(postId)
+  }, [postId])
   return (
-    <div id={'model-canvas'}>
-      {postData ? (
+    <div className="model-preview-container">
+      {postData && modelUrl ? (
         <>
-          <div id={'title-container'}>
-            <span id={'title'}>{postData.title} </span>
-          </div>
+          <h1>{postData.title}</h1>
           <hr />
           <div id={'code-container'}>
             <CopyToClipboard
@@ -103,7 +103,7 @@ const ModelPreviewPage = () => {
               <OrbitControls />
               <Environment preset="city" background blur={1} />
               <Suspense>
-                <Model url={postData['fileUrl']} />
+                <Model url={modelUrl} />
               </Suspense>
             </Canvas>
           </div>

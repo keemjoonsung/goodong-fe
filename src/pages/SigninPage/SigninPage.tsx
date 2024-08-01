@@ -1,8 +1,8 @@
-import {useState} from 'react'
-import {Button, Card, Form, Image} from 'react-bootstrap'
+import { useState } from 'react'
+import { Button, Card, Form, Image } from 'react-bootstrap'
 import './Signin.css'
 import api from '../../apis'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const SigninPage = () => {
   const [email, setEmail] = useState('')
@@ -16,7 +16,7 @@ const SigninPage = () => {
     api.login(email, password).then(token => {
       localStorage.setItem('jwtToken', token)
       localStorage.setItem('username', email)
-      navigate('/')
+      location.href = '/'
     })
   }
 
@@ -24,7 +24,7 @@ const SigninPage = () => {
     <div className="signin-page">
       <Image src="/img/Logo-black.png" alt="goodong-logo" height={80} />
       <h1>Sign in to Goodong</h1>
-      <Card body style={{width: 400, background: '#f7f7f7'}}>
+      <Card body style={{ width: 400, background: '#f7f7f7' }}>
         <Form.Label>Email</Form.Label>
         <Form.Control
           className="search-bar"

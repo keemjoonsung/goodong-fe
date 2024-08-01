@@ -1,11 +1,13 @@
-import {useState} from 'react'
-import {Form} from 'react-bootstrap'
+import { useState } from 'react'
+import { Form } from 'react-bootstrap'
 import './MainPage.css'
+import { useNavigate } from 'react-router-dom'
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState('')
+  const navigate = useNavigate()
   const handleSubmit = () => {
-    console.log(searchString)
+    navigate(`/search?q=${searchString}`)
   }
   return (
     <div className="main-background">

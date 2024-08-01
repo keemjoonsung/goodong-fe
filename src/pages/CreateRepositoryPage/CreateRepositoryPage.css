@@ -1,22 +1,18 @@
-.container input[type='text'] {
-  position: relative;
-  top: -26px;
-  border-radius: 5px;
-  border-width: 1px;
-  height: 40px;
-  width: 250px;
-  font-size: 12px;
-  padding-left: 5px;
+.create-repo-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 0;
 }
-.form-group {
-  margin-bottom: 0;
-}
+
 #content {
   resize: none;
   height: 100px;
   border-radius: 5px;
 }
-
+.form-group {
+  margin-bottom: 10px;
+}
 #file-label {
   font-size: 14px;
   margin-bottom: 0px;

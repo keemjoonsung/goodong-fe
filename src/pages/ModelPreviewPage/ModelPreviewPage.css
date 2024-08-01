@@ -1,12 +1,11 @@
-#model-canvas {
-  margin-left: 200px;
-  margin-right: 200px;
+.model-preview-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
 }
-#canvas-container {
-  border: 1px solid #ffffff;
-  border-radius: 15px;
-  overflow: hidden; /* 원형을 넘어가는 부분을 숨김 */
-  height: 100vh; /* 브라우저 세로 전체 */
+#canvas-container canvas {
+  height: 800px;
 }
 #content-container {
   margin-top: 15px;

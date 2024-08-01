@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://goodong-api-twtv7iqgaa-de.a.run.app',
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
 const login = (username: string, password: string) => {
-  return instance.post('/login', {username, password}).then(response => {
+  return instance.post('/login', { username, password }).then(response => {
     console.log(response.headers['authorization'])
     const token = response.headers['authorization'] ?? ''
     if (token) instance.defaults.headers['authorization'] = token
@@ -17,11 +17,11 @@ const login = (username: string, password: string) => {
 }
 
 const checkToken = (token: string) => {
-  return instance.get('/auth/expired', {headers: {Authorization: token}})
+  return instance.get('/auth/expired', { headers: { Authorization: token } })
 }
 
 const signup = (username: string, password: string) => {
-  return instance.post('/register', {username, password})
+  return instance.post('/register', { username, password })
 }
 
 const getPostByUserId = (userId: string) => {
@@ -39,9 +39,22 @@ const getPost = (postId: string) => {
     },
   })
 }
+const createPost = (formData: FormData) => {
+  return instance.post('/repository/savepost', formData, {
+    headers: {
+      Authorization: localStorage.getItem('jwtToken'),
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}
+const downloadGLB = (postId: string) => {
+  return instance.get(`/repository/download/${postId}`, {
+    responseType: 'blob',
+  })
+}
 
 const searchPost = (keyword: string) => {
-  return instance.get('/repository/search', {
+  return instance.get('/repository/searchPosts', {
     params: {
       keyword: keyword,
     },
@@ -54,6 +67,9 @@ const api = Object.freeze({
   signup,
   getPostByUserId,
   getPost,
+  createPost,
+  downloadGLB,
+  searchPost,
 })
 
 export default api

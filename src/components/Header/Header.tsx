@@ -1,33 +1,20 @@
-import React, {useEffect, useState} from 'react'
-import {Image, Modal} from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Image, Modal } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import RegisterForm from '../RegisterForm/RegisterForm'
 import LoginForm from '../LoginForm/LoginForm'
 import './Header.css'
-import {Link, useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import api from '../../apis'
 
 const Header = () => {
-  const [loginModal, setLoginModal] = useState(false)
   const navigate = useNavigate()
 
   const gotoSigninPage = () => {
     navigate('/signin')
   }
-
-  const showLoginModal = () => {
-    setLoginModal(true)
-  }
-  const hideLoginModal = () => {
-    setLoginModal(false)
-  }
-
-  const [registerModal, setRegisterModal] = useState(false)
-  const showRegisterModal = () => {
-    setRegisterModal(true)
-  }
-  const hideRegisterModal = () => {
-    setRegisterModal(false)
+  const gotoSignupPage = () => {
+    navigate('/signup')
   }
 
   const [isLogin, setIsLogin] = useState(false)
@@ -73,7 +60,7 @@ const Header = () => {
           <button
             className={'button'}
             id={'create-account-button'}
-            onClick={showRegisterModal}>
+            onClick={gotoSignupPage}>
             Create account
           </button>
         </span>
@@ -95,7 +82,7 @@ const Header = () => {
           </Link>
         </span>
       )}
-      <Modal show={registerModal} onHide={hideRegisterModal}>
+      {/* <Modal show={registerModal} onHide={hideRegisterModal}>
         <Modal.Body>
           <RegisterForm />
         </Modal.Body>
@@ -109,7 +96,7 @@ const Header = () => {
             setId={setUserID}
           />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </div>
   )
 }

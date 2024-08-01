@@ -1,7 +1,9 @@
-import React, {useEffect, useState} from 'react'
-import {Link, useNavigate, useParams} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import './RepositoryPage.css'
 import api from '../../apis'
+import { Button, Form } from 'react-bootstrap'
+import RepoList from '../../components/RepoList/RepoList'
 
 const RepositoryPage = () => {
   const [repoData, setRepoData] = useState<
@@ -9,10 +11,18 @@ const RepositoryPage = () => {
       postId: number
       userId: number
       title: string
+      content: string
     }[]
   >([])
+  const [searchString, setSearchString] = useState('')
   const navigate = useNavigate()
-  const {userID} = useParams()
+  const { userID } = useParams()
+
+  const gotoEditProfile = () => {
+    navigate('/editProfile')
+  }
+
+  const handleSubmit = () => {}
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,35 +41,45 @@ const RepositoryPage = () => {
   }, [])
 
   return (
-    <div className="container">
-      <div className={'repo-header'}>
-        <span className={'repo-username'}>{userID}</span>
-        <Link to="/repository/create">
-          <button className="btn-create">New</button>
-        </Link>
+    <div className="repo-list">
+      <div className="repo-left">
+        <div className="repo-left-item">
+          <img
+            src="https://avatars.githubusercontent.com/u/42940044?v=4"
+            alt="profile"
+          />
+        </div>
+        <div className="repo-left-item">{userID}</div>
+        <div className="repo-left-item">
+          <Button onClick={gotoEditProfile}>Edit Profile</Button>
+        </div>
+        <div className="divider"></div>
       </div>
-      <hr />
-      {repoData ? (
-        <div>
-          <ul>
-            {repoData.map((item, index) => (
-              <Link
-                className={'repo-link'}
-                to={`/${item.userId}/repository/${item.postId}`}
-                key={index}>
-                <div className="repo-item">
-                  <span>{item.title}</span>
-                </div>
-              </Link>
-            ))}
-          </ul>
+      <div className="repo-right">
+        <div className={'repo-header'}>
+          <Form.Control
+            className="search-bar"
+            type="text"
+            placeholder="Search"
+            value={searchString}
+            onChange={e => setSearchString(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSubmit()}></Form.Control>
+          <Link to="/repository/create">
+            <button className="btn-create">New</button>
+          </Link>
         </div>
-      ) : (
-        <div>
-          User Repository is currently empty!!!
-          <br />
-        </div>
-      )}
+        <div className="divider"></div>
+        {repoData.length ? (
+          <div>
+            <RepoList repoData={repoData} />
+          </div>
+        ) : (
+          <div>
+            User Repository is currently empty!!!
+            <br />
+          </div>
+        )}
+      </div>
     </div>
   )
 }
