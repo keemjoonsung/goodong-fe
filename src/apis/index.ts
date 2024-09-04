@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL as string
+
 const instance = axios.create({
-  baseURL: 'https://goodong-api-twtv7iqgaa-de.a.run.app',
+  baseURL: SERVER_URL,
   headers: {
     'Content-Type': 'application/json',
   },
