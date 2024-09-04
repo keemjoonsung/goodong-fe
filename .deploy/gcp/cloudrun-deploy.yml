@@ -1,0 +1,41 @@
+steps:
+  # docker BUILD
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
+      - '-f'
+      - 'Dockerfile'  # Dockerfile 경로 설정
+      - '.'
+    env:
+      - 'VITE_SERVER_URL=${_VITE_SERVER_URL}'
+
+  # docker PUSH
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe:latest'
+
+  # CloudRun DEPLOY
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'goodong-fe'
+      - '--image'
+      - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--region'
+      - 'asia-northeast1'
+    env:
+      - 'VITE_SERVER_URL=${_VITE_SERVER_URL}'
+
+images:
+  - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
