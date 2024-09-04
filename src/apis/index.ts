@@ -23,6 +23,7 @@ const checkToken = (token: string) => {
 }
 
 const signup = (username: string, password: string) => {
+  console.log(SERVER_URL)
   return instance.post('/register', { username, password })
 }
 
