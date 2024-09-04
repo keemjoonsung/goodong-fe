@@ -7,9 +7,9 @@ steps:
       - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
       - '-f'
       - '.deploy/Dockerfile'
+      - '--build-arg'
+      - '_VITE_SERVER_URL=$_VITE_SERVER_URL'
       - '.'
-    env:
-      - 'VITE_SERVER_URL=${_VITE_SERVER_URL}'
 
   # docker PUSH
   - name: 'gcr.io/cloud-builders/docker'
@@ -31,8 +31,6 @@ steps:
       - '--allow-unauthenticated'
       - '--region'
       - 'asia-northeast1'
-    env:
-      - 'VITE_SERVER_URL=${_VITE_SERVER_URL}'
 
 images:
   - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
