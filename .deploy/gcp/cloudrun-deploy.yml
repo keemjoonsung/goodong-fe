@@ -17,7 +17,7 @@ steps:
       - 'push'
       - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe:latest'
 
-  # CloudRun DEPLOY.
+  # CloudRun DEPLOY
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
