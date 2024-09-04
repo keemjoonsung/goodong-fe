@@ -6,7 +6,7 @@ steps:
       - '-t'
       - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
       - '-f'
-      - 'Dockerfile'  # Dockerfile 경로 설정
+      - 'Dockerfile'
       - '.'
     env:
       - 'VITE_SERVER_URL=${_VITE_SERVER_URL}'
