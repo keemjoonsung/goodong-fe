@@ -6,7 +6,7 @@ steps:
       - '-t'
       - 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/goodong/goodong-fe'
       - '-f'
-      - 'Dockerfile'
+      - '.deploy/Dockerfile'
       - '.'
     env:
       - 'VITE_SERVER_URL=${_VITE_SERVER_URL}'
