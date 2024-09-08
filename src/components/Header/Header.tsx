@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Image, Modal } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import RegisterForm from '../RegisterForm/RegisterForm'
-import LoginForm from '../LoginForm/LoginForm'
 import './Header.css'
 import { Link, useNavigate } from 'react-router-dom'
-import api from '../../apis'
+import useMainStore from '../../stores'
 
 const Header = () => {
   const navigate = useNavigate()
+  const user = useMainStore(state => state.user)
 
   const gotoSigninPage = () => {
     navigate('/signin')
@@ -16,32 +15,11 @@ const Header = () => {
   const gotoSignupPage = () => {
     navigate('/signup')
   }
-
-  const [isLogin, setIsLogin] = useState(false)
-  const [userID, setUserID] = useState('')
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem('jwtToken') as string
-    const username = localStorage.getItem('username') as string
-    if (storedToken) {
-      api.checkToken(storedToken).then(response => {
-        const isTokenExpired = response.data
-
-        if (isTokenExpired) {
-          logout()
-        } else {
-          setIsLogin(true)
-          setUserID(username)
-        }
-      })
-    }
-  }, [])
+  const isLogin = user !== null
 
   const logout = () => {
     localStorage.removeItem('jwtToken')
-    localStorage.removeItem('username')
-    setIsLogin(false)
-    setUserID('')
+    location.href = '/'
   }
 
   return (
@@ -65,12 +43,12 @@ const Header = () => {
           </button>
         </span>
       )}
-      {isLogin && userID !== '' && (
+      {isLogin && user.nickname !== '' && (
         <span id={'user-span'}>
           <span className={'user-info'} id={'user-info-text'}>
-            {userID} 님 반갑습니다!
+            {user.nickname} 님 반갑습니다!
           </span>
-          <Link to={`/${userID}/repository`}>
+          <Link to={`/${user.userId}`}>
             <button className={'button'} id={'my-repository-button'}>
               My Repository
             </button>
@@ -82,21 +60,6 @@ const Header = () => {
           </Link>
         </span>
       )}
-      {/* <Modal show={registerModal} onHide={hideRegisterModal}>
-        <Modal.Body>
-          <RegisterForm />
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={loginModal} onHide={hideLoginModal}>
-        <Modal.Body>
-          <LoginForm
-            setLoginModal={setLoginModal}
-            setIsLogin={setIsLogin}
-            setId={setUserID}
-          />
-        </Modal.Body>
-      </Modal> */}
     </div>
   )
 }

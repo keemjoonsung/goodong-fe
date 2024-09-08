@@ -2,18 +2,16 @@ import { useState } from 'react'
 import { Button, Card, Form, Image } from 'react-bootstrap'
 import './Signin.css'
 import api from '../../apis'
-import { useNavigate } from 'react-router-dom'
 
 const SigninPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
 
   const handleSignin = () => {
     if (!email.trim() || !password.trim()) {
       return
     }
-    api.login(email, password).then(token => {
+    api.auth.login(email, password).then(token => {
       localStorage.setItem('jwtToken', token)
       localStorage.setItem('username', email)
       location.href = '/'

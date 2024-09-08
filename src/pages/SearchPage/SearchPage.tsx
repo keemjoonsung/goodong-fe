@@ -4,12 +4,13 @@ import './SearchPage.css'
 import api from '../../apis'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import RepoList from '../../components/RepoList/RepoList'
+import { Post } from '../../types/post'
 
 const SearchPage = () => {
   const [searchString, setSearchString] = useState('')
   const navigate = useNavigate()
   const [searchParam, setSearchParams] = useSearchParams()
-  const [searchResult, setSearchResult] = useState([])
+  const [searchResult, setSearchResult] = useState<Post[]>([])
 
   const handleSubmit = () => {
     setSearchParams({ q: searchString })
@@ -18,9 +19,8 @@ const SearchPage = () => {
   useEffect(() => {
     const keyword = searchParam.get('q')
     const search = async (keyword: string) => {
-      const response = await api.searchPost(keyword)
-      console.log(response.data)
-      setSearchResult(response.data)
+      const posts = await api.post.searchPost(keyword)
+      setSearchResult(posts)
       setSearchString(keyword)
     }
     if (keyword) search(keyword)
@@ -28,7 +28,6 @@ const SearchPage = () => {
 
   return (
     <div className="search-container">
-      {/* <h3>Search: {searchParam.get('q')}</h3> */}
       <Form.Control
         className="search-bar"
         type="text"
@@ -37,9 +36,7 @@ const SearchPage = () => {
         onChange={e => setSearchString(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && handleSubmit()}></Form.Control>
       <hr />
-      {searchResult.length > 0 && (
-        <h3>There is {searchResult.length} results</h3>
-      )}
+      {searchResult.length > 0 && <h3>{searchResult.length} results</h3>}
       <div className="search-result">
         <RepoList repoData={searchResult} />
         {searchResult.length === 0 && <p>No result</p>}

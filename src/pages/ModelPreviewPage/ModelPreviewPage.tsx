@@ -63,17 +63,16 @@ const ModelPreviewPage = () => {
   const [modelCode, setModelCode] = useState('')
   const [modelUrl, setModelUrl] = useState('')
   const params = useParams()
-  const postId = params['postID']
+  const postId = parseInt(params['postID'] as string)
 
   useEffect(() => {
-    const fetchData = async (postId: string) => {
+    const fetchData = async (postId: number) => {
       try {
-        const postResponse = await api.getPost(postId)
-        setPostData(postResponse.data)
+        const detail = await api.post.getPostDetail(postId)
+        setPostData(detail)
 
-        const response = await api.downloadGLB(postId)
-        const blob = new Blob([response.data], { type: 'model/gltf-binary' })
-        const url = URL.createObjectURL(blob)
+        console.log(detail.models)
+        const url = detail.models[0].fileUrl
         setModelUrl(url)
         console.log(url)
       } catch (error) {
@@ -99,13 +98,13 @@ const ModelPreviewPage = () => {
             </CopyToClipboard>
           </div>
           <div id={'canvas-container'}>
-            <Canvas>
+            {/* <Canvas>
               <OrbitControls />
               <Environment preset="city" background blur={1} />
               <Suspense>
                 <Model url={modelUrl} />
               </Suspense>
-            </Canvas>
+            </Canvas> */}
           </div>
           <div id={'content-container'}>
             <div id={'content-description'}>Description</div>

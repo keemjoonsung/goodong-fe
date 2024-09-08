@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import './RepoList.css'
+import { Post } from '../../types/post'
 
-const RepoList = ({ repoData }: { repoData: any[] }) => {
+const RepoList = ({ repoData }: { repoData: Post[] }) => {
   return (
     <div>
       {repoData.map((item, index) => (
@@ -14,16 +15,19 @@ const RepoList = ({ repoData }: { repoData: any[] }) => {
                 <span>{item.title}</span>
               </Link>
             </div>
-            <div className="repo-item-description">{item.content}</div>
+            <div className="repo-item-description">{item.nickname}</div>
             <div className="repo-item-tags">
-              <span>Tag1</span>
-              <span>Tag2</span>
-              <span>Tag3</span>
+              {item.tags.map((tag, index) => (
+                <span key={index}>{tag}</span>
+              ))}
             </div>
           </div>
           <div className="repo-item-right">
             <img
-              src="https://avatars.githubusercontent.com/u/42940044?v=4"
+              src={
+                item.profileImage ??
+                'https://avatars.githubusercontent.com/u/42940044?v=4'
+              }
               alt={`${item.title}_thumb`}
             />
           </div>
