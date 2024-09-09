@@ -80,7 +80,13 @@ const getPostDetail = (postId: number) => {
 const deletePost = (postId: number) => {
   return instance.delete(`/posts/${postId}`)
 }
-const updatePost = (postId: number) => {}
+const updatePost = (postId: number, formData: FormData) => {
+  return instance.patch(`/posts/${postId}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}
 const searchPost = (keyword: string) => {
   return instance.get(`/posts/search?keyword=${keyword}`).then(({ data }) => {
     return data.data.map((post: Post) => {
@@ -99,6 +105,21 @@ const downloadGLB = (fileName: string) => {
       responseType: 'blob',
     })
     .then(({ data }) => data)
+}
+const generateDescription = (formData: FormData) => {
+  return instance
+    .post('/ai', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then(({ data }) => {
+      return data.data as {
+        title: string
+        description: string
+        tags: string[]
+      }
+    })
 }
 
 const like = (postId: number, target: boolean) => {
@@ -183,6 +204,7 @@ const api = Object.freeze({
     checkDuplicatedTitle,
     searchPost,
     downloadGLB,
+    generateDescription,
   },
   like: {
     like,

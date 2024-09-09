@@ -14,6 +14,8 @@ import api, { setAPIToken } from './apis'
 import useMainStore from './stores'
 import FollowerPage from './pages/FollowerPage/FollowerPage'
 import FollowingPage from './pages/FollowingPage/FollowingPage'
+import ProfileEditPage from './pages/ProfileEditPage/ProfileEditPage'
+import PostEditPage from './pages/PostEditPage/PostEditPage'
 
 function App() {
   const setUser = useMainStore(state => state.setUser)
@@ -47,10 +49,12 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile/edit" element={<ProfileEditPage />} />
         <Route path="/:userID" element={<UserPage />} />
         <Route path="/:userID/follower" element={<FollowerPage />} />
         <Route path="/:userID/following" element={<FollowingPage />} />
         <Route path="/:userID/:postID" element={<PostPage />} />
+        <Route path="/:userID/:postID/edit" element={<PostEditPage />} />
         <Route path="/repository/create" element={<CreateRepositoryPage />} />
       </Routes>
       <Footer />

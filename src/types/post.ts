@@ -3,7 +3,7 @@ import { User } from './user'
 export interface Post extends User {
   postId: number
   title: string
-  status: string
+  status: 'PUBLIC' | 'PRIVATE'
   lastModifiedAt: string
   tags: string[]
   likes: number

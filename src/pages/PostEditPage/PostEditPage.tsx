@@ -1,43 +1,23 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react'
-import './CreateRepositoryPage.css'
+import './PostEditPage.css'
 import api from '../../apis'
-import { useNavigate } from 'react-router-dom'
-import { Button, Form, InputGroup } from 'react-bootstrap'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Form, InputGroup } from 'react-bootstrap'
 import useMainStore from '../../stores'
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
-import { Magic } from 'react-bootstrap-icons'
-import { Box3, Vector3 } from 'three'
+import { PostDetail } from '../../types/post'
 
 const Model = ({ glbData }: { glbData: any }) => {
-  const [scaleFactor, setScaleFactor] = useState(1)
-  const [yPos, setYPos] = useState(0)
-  const [xPos, setXPos] = useState(0)
   const { scene } = useGLTF(glbData) as any
-  useEffect(() => {
-    const bbox = new Box3().setFromObject(scene)
-    const min = bbox.min
-    const max = bbox.max
-    const miny = Math.floor(min.y)
-    const maxy = Math.floor(max.y)
-
-    const yPos = (miny + maxy) / 2
-    const xPos = (min.x + max.x) / 2
-    const size = new Vector3()
-    bbox.getSize(size)
-    const scaleFactor = 4 / Math.max(size.x, size.y, size.z)
-
-    setYPos(yPos)
-    setXPos(xPos)
-    setScaleFactor(scaleFactor)
-  }, [scene])
-  return (
-    <primitive object={scene} position={[xPos, yPos, 0]} scale={scaleFactor} />
-  )
+  return <primitive object={scene} />
 }
 
-const CreateRepositoryPage = () => {
+const PostEditPage = () => {
   const user = useMainStore(state => state.user)
+  const navigate = useNavigate()
+
+  const [commitMessage, setCommitMessage] = useState('')
   const [title, setTitle] = useState('')
   const [tag1, setTag1] = useState('')
   const [tag2, setTag2] = useState('')
@@ -46,8 +26,29 @@ const CreateRepositoryPage = () => {
   const [content, setContent] = useState('')
   const [gltfFile, setGltfFile] = useState<any>(null) // 추가: glTF 파일 상태
   const [glbData, setGlbData] = useState<any>(null)
+  const params = useParams()
+  const postId = parseInt(params['postID'] as string)
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    const fetchData = async (postId: number) => {
+      try {
+        const detail = await api.post.getPostDetail(postId)
+        if (detail.userId !== user?.userId) {
+          alert('You are not the owner of this post.')
+          navigate(`/${user?.userId}`)
+        }
+        setTitle(detail.title)
+        setContent(detail.content)
+        setTag1(detail.tags[0])
+        setTag2(detail.tags[1])
+        setTag3(detail.tags[2])
+        setStatus(detail.status)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    if (postId) fetchData(postId)
+  }, [postId])
 
   const handleContentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -71,28 +72,10 @@ const CreateRepositoryPage = () => {
       reader.readAsArrayBuffer(file)
     }
   }
-  const generateDescription = async () => {
-    // capture threejs canvas
-    const canvas = document.querySelector('canvas')
-    const dataUrl = canvas?.toDataURL('image/jpeg')
-    if (!dataUrl) {
-      alert('Fail to capture image')
-      return
-    }
-    const binaryFile = await fetch(dataUrl).then(res => res.blob())
-    const formData = new FormData()
-    formData.append('file', binaryFile)
-    const data = await api.post.generateDescription(formData)
-    setTitle(data.title)
-    setContent(data.description)
-    setTag1(data.tags[0])
-    setTag2(data.tags[1])
-    setTag3(data.tags[2])
-  }
 
   const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!title || !content || !tag1 || !gltfFile) {
+    if (!commitMessage || !title || !content || !tag1 || !gltfFile) {
       alert('필수 입력값을 모두 입력해주세요.')
       return
     }
@@ -105,6 +88,7 @@ const CreateRepositoryPage = () => {
     }
 
     const formData = new FormData()
+    formData.append('commitMessage', commitMessage)
     formData.append('title', title)
     formData.append('content', content)
     formData.append('tags', [tag1, tag2, tag3].join(','))
@@ -112,8 +96,8 @@ const CreateRepositoryPage = () => {
     formData.append('file', gltfFile) // 추가: glTF 파일 추가
 
     try {
-      await api.post.addPost(formData)
-      navigate(`/${user?.userId}`)
+      await api.post.updatePost(postId, formData)
+      navigate(`/${user?.userId}/${postId}`)
     } catch (error) {
       console.error(error)
     }
@@ -121,7 +105,7 @@ const CreateRepositoryPage = () => {
 
   return (
     <div className="create-repo-container">
-      <h3>Create a new repository</h3>
+      <h3>Upload new version</h3>
       <hr />
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -136,28 +120,30 @@ const CreateRepositoryPage = () => {
           />
         </div>
         {glbData && (
-          <>
-            <div className="model-preview">
-              <Canvas gl={{ preserveDrawingBuffer: true }}>
-                <Suspense fallback={null}>
-                  {/* add light */}
-                  <ambientLight intensity={5} />
-                  <pointLight position={[10, 10, 10]} />
-                  {/* <Environment preset="sunset" /> */}
-                  <Model glbData={glbData} />
-                  <OrbitControls />
-                  <color attach="background" args={['#f0f0f0']} />
-                </Suspense>
-              </Canvas>
-            </div>
-            <Button onClick={generateDescription}>
-              <Magic />
-              Generate Description
-            </Button>
-          </>
+          <div className="model-preview">
+            <Canvas>
+              <Suspense fallback={null}>
+                {/* add light */}
+                <ambientLight intensity={5} />
+                <pointLight position={[10, 10, 10]} />
+                {/* <Environment preset="sunset" /> */}
+                <Model glbData={glbData} />
+                <OrbitControls />
+              </Suspense>
+            </Canvas>
+          </div>
         )}
 
         <hr />
+        <div className="form-group">
+          <Form.Label>Commit Message</Form.Label>
+          <Form.Control
+            className="search-bar"
+            type="text"
+            placeholder="Commit Message"
+            value={commitMessage}
+            onChange={e => setCommitMessage(e.target.value)}></Form.Control>
+        </div>
         <div className="form-group">
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -228,4 +214,4 @@ const CreateRepositoryPage = () => {
   )
 }
 
-export default CreateRepositoryPage
+export default PostEditPage

@@ -1,0 +1,43 @@
+.create-repo-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+#content {
+  resize: none;
+  height: 100px;
+  border-radius: 5px;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+#file-label {
+  font-size: 14px;
+  margin-bottom: 0px;
+  color: #bb0d0d;
+}
+.form-group input[type='file'] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.btn-submit {
+  background-color: #2ea44f;
+  color: #fff;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #22863a;
+}
+
+.model-preview {
+  width: 600px;
+  height: 600px;
+}
