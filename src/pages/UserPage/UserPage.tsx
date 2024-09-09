@@ -7,6 +7,7 @@ import RepoList from '../../components/RepoList/RepoList'
 import { User, UserDetail } from '../../types/user'
 import { Post } from '../../types/post'
 import useMainStore from '../../stores'
+import { Envelope, Person } from 'react-bootstrap-icons'
 
 const UserPage = () => {
   const user = useMainStore(state => state.user)
@@ -32,7 +33,15 @@ const UserPage = () => {
     api.follow.follow(parseInt(userID), false)
   }
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {
+    if (!searchString) {
+      return
+    }
+    const l = repoData.filter((item: Post) => {
+      return item.title.includes(searchString)
+    })
+    setRepoData(l)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,8 +80,12 @@ const UserPage = () => {
             alt="profile"
           />
         </div>
-        <div className="repo-left-item">{currentUser?.nickname}</div>
-        <div className="repo-left-item">{currentUser?.email}</div>
+        <div className="repo-left-item">
+          <Person size={20} /> {currentUser?.nickname}
+        </div>
+        <div className="repo-left-item">
+          <Envelope size={20} /> {currentUser?.email}
+        </div>
         {currentUser?.userId === user?.userId ? (
           <div className="repo-left-item">
             <Button onClick={gotoEditProfile}>Edit Profile</Button>
@@ -127,7 +140,7 @@ const UserPage = () => {
           </div>
         ) : (
           <div>
-            User Repository is currently empty!!!
+            No data
             <br />
           </div>
         )}

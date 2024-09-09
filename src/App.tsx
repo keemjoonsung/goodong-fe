@@ -4,7 +4,7 @@ import Footer from './components/Footer/Footer'
 import { Route, Routes } from 'react-router-dom'
 import MainPage from './pages/MainPage/MainPage'
 import UserPage from './pages/UserPage/UserPage'
-import ModelPreviewPage from './pages/ModelPreviewPage/ModelPreviewPage'
+import PostPage from './pages/PostPage/PostPage'
 import CreateRepositoryPage from './pages/CreateRepositoryPage/CreateRepositoryPage'
 import SigninPage from './pages/SigninPage/SigninPage'
 import SignupPage from './pages/SignupPage/SignupPage'
@@ -50,10 +50,7 @@ function App() {
         <Route path="/:userID" element={<UserPage />} />
         <Route path="/:userID/follower" element={<FollowerPage />} />
         <Route path="/:userID/following" element={<FollowingPage />} />
-        <Route
-          path="/:userID/repository/:postID"
-          element={<ModelPreviewPage />}
-        />
+        <Route path="/:userID/:postID" element={<PostPage />} />
         <Route path="/repository/create" element={<CreateRepositoryPage />} />
       </Routes>
       <Footer />

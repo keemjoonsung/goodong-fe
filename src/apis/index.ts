@@ -93,6 +93,13 @@ const checkDuplicatedTitle = (title: string) => {
     return data.data as boolean
   })
 }
+const downloadGLB = (fileName: string) => {
+  return instance
+    .get(`/posts/download?fileName=${fileName}`, {
+      responseType: 'blob',
+    })
+    .then(({ data }) => data)
+}
 
 const like = (postId: number, target: boolean) => {
   if (target) {
@@ -175,6 +182,7 @@ const api = Object.freeze({
     updatePost,
     checkDuplicatedTitle,
     searchPost,
+    downloadGLB,
   },
   like: {
     like,

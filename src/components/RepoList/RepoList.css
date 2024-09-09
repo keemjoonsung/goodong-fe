@@ -18,8 +18,15 @@
   text-decoration: none;
   font-weight: bold;
 }
+.repo-item-date {
+  margin: 10px 0 0;
+  font-size: 14px;
+}
 .repo-item-description {
-  margin: 20px 0 0;
+  margin: 10px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .repo-item-tags {
   display: flex;
