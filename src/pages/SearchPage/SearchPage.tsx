@@ -28,15 +28,6 @@ const SearchPage = () => {
 
   return (
     <div className="search-container">
-      <Form.Control
-        className="search-bar"
-        type="text"
-        placeholder="Search"
-        value={searchString}
-        onChange={e => setSearchString(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleSubmit()}></Form.Control>
-      <hr />
-      {searchResult.length > 0 && <h3>{searchResult.length} results</h3>}
       <div className="search-result">
         <RepoList repoData={searchResult} />
         {searchResult.length === 0 && <p>No result</p>}

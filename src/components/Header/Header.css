@@ -1,28 +1,120 @@
 #header-frame {
   display: flex;
+  justify-content: space-between; /* 요소들을 양 끝에 배치 */
   align-items: center;
-  justify-content: space-between; /* 좌우 여백을 최대로 설정하여 요소 사이에 공간을 만듭니다. */
   padding: 10px;
-  background-color: #24292e;
-  height: 80px;
+  background-color: #F4F7F9;
+  height: 60px;
+  border-top: #E3E8EC solid 1px;
+  border-bottom:#E3E8EC solid 1px;
 }
 
-.button {
-  padding: 8px 16px;
-  margin: 5px;
-  border: none;
-  background-color: #6c757d;
-  color: #fff;
-  border-radius: 4px;
+#home-link {
+  display: flex;
+  align-items: center; /* 로고와 텍스트를 수직 정렬 */
+}
+
+.icon-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #E3E8EC;
+  border-radius: 8px;
+  background-color: #F4F7F9;
   cursor: pointer;
 }
 
+.button {
+  padding: 9px 9px;
+  margin-top: 12px;
+  margin-left: 10px;
+  background-color: #F4F7F9;
+  border: 1px solid #E3E8EC;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #000000;
+}
+
 .button:hover {
-  background-color: #495057;
+  background-color: #E7EBEE;
 }
 
 .user-info {
   margin: 10px;
   font-weight: bold;
-  color: #fff;
+  color: #000000;
+}
+
+#goodong-logo {
+  margin-left: 15px;
+  width: 39px;
+  height: 39px;
+}
+
+#goodong-logo-letter {
+  font-size: 14px;
+  margin-left: 13px;
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+#home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+#left-section {
+  display: flex;
+  align-items: center;
+}
+
+#right-section {
+  display: flex;
+  align-items: center;
+}
+
+.profile-image img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 동그란 모양을 만듦 */
+  border: 2px solid #E3E8EC; /* 테두리 추가 */
+  object-fit: cover; /* 이미지를 동그라미 안에 맞춤 */
+  margin-bottom: 5px;
+  margin-left:10px;
+}
+/* 검색바 컨테이너 */
+.search-bar-container {
+  position: relative;
+  display: inline-flex; /* 한 줄에 요소들이 배치되도록 설정 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 380px;
+}
+
+/* 돋보기 아이콘 */
+.search-icon {
+  position: relative;
+  left: 27px;
+  bottom: 2px;
+  z-index: 2;
+  color: #999;
+  pointer-events: none; /* 클릭할 수 없도록 설정 */
+}
+
+/* 검색바 */
+.search-bar {
+  width: 100%;
+  padding-left: 35px; /* 아이콘 공간을 확보하기 위해 패딩 추가 */
+  height: 36px;
+  border: 1px solid #E3E8EC;
+  border-radius: 8px;
+  margin-bottom: 5px; /* 기본 margin-bottom 제거 */
+  display: inline-block; /* 한 줄에 배치 */
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #999; /* 포커스 시 테두리 색상 변경 */
 }

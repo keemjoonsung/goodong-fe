@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { Image, Modal } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Form, Image } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 import { Link, useNavigate } from 'react-router-dom'
 import useMainStore from '../../stores'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch, faUser, faSignOutAlt, faSignInAlt, faPlusCircle, faBars } from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
   const navigate = useNavigate()
   const user = useMainStore(state => state.user)
+  const [searchString, setSearchString] = useState('')
+  const handleSubmit = () => {
+    navigate(`/search?q=${searchString}`)
+  }
 
   const gotoSigninPage = () => {
     navigate('/signin')
@@ -24,42 +30,73 @@ const Header = () => {
 
   return (
     <div id={'header-frame'}>
-      <Link to={'/'}>
-        <Image src={'/img/Logo.png'} id={'goodong-logo'} height="60" />
-      </Link>
-      {!isLogin && (
-        <span id={'regi-span'}>
-          <button
-            className={'button'}
-            id={'signin-button'}
-            onClick={gotoSigninPage}>
-            Sign in
-          </button>
-          <button
-            className={'button'}
-            id={'create-account-button'}
-            onClick={gotoSignupPage}>
-            Create account
-          </button>
-        </span>
-      )}
-      {isLogin && user.nickname !== '' && (
-        <span id={'user-span'}>
-          <span className={'user-info'} id={'user-info-text'}>
-            {user.nickname} 님 반갑습니다!
+      <div id={'left-section'}>
+        {/* 햄버거 메뉴 아이콘 */}
+        <button className="icon-button">
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+  
+        {/* 로고 */}
+        <Link to={'/'} id={'home-link'}>
+          <Image src={'/img/Logo.png'} id={'goodong-logo'} />
+          <span id={'goodong-logo-letter'}>GOODONG</span>
+        </Link>
+      </div>
+  
+      <div id={'right-section'}>
+        {!isLogin && (
+          <span id={'regi-span'}>
+            <button
+              className={'button icon-button'}
+              id={'signin-button'}
+              onClick={gotoSigninPage}>
+              <FontAwesomeIcon icon={faSignInAlt} />
+            </button>
+            <button
+              className={'button icon-button'}
+              id={'create-account-button'}
+              onClick={gotoSignupPage}>
+              <FontAwesomeIcon icon={faPlusCircle} />
+            </button>
           </span>
-          <Link to={`/${user.userId}`}>
-            <button className={'button'} id={'my-repository-button'}>
-              My Repository
-            </button>
-          </Link>
-          <Link to={'/'}>
-            <button className={'button'} id={'logout-button'} onClick={logout}>
-              Logout
-            </button>
-          </Link>
-        </span>
-      )}
+        )}
+        {isLogin && user.nickname !== '' && (
+
+          <span id={'user-span'}>
+              <Form.Group className="search-bar-container">
+                <span className="search-icon">
+                  <FontAwesomeIcon icon={faSearch} />
+                </span>
+                <Form.Control
+                  className="search-bar"
+                  type="text"
+                  placeholder="search"
+                  value={searchString}
+                  onChange={e => setSearchString(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+                />
+            </Form.Group>
+            <Link to={`/${user.userId}`}>
+              <button className={'button icon-button'} id={'my-repository-button'}>
+                <FontAwesomeIcon icon={faUser} />
+              </button>
+            </Link>
+            <Link to={'/'}>
+              <button className={'button icon-button'} id={'logout-button'} onClick={logout}>
+                <FontAwesomeIcon icon={faSignOutAlt} />
+              </button>
+            </Link>
+            <span className={'profile-image'}>
+                  <img
+                    src={
+                      'https://avatars.githubusercontent.com/u/42940044?v=4'
+                    }
+                    alt="profile"
+                  />
+                </span>
+          </span>
+        )}
+      </div>
     </div>
   )
 }

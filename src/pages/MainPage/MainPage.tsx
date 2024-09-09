@@ -11,16 +11,7 @@ const MainPage = () => {
   }
   return (
     <div className="main-background">
-      <h1>Goodong</h1>
-      <p>Search 3D Model you want!</p>
-      <Form.Control
-        className="search-bar"
-        type="text"
-        placeholder="Search"
-        value={searchString}
-        onChange={e => setSearchString(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleSubmit()}></Form.Control>
-      <div className="blur"></div>
+
     </div>
   )
 }
