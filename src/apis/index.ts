@@ -88,20 +88,20 @@ const updatePost = (postId: number, formData: FormData) => {
   })
 }
 const searchPost = (keyword: string) => {
-  return instance.get(`/posts/search?keyword=${keyword}`).then(({ data }) => {
+  return instance.get(`/posts?keyword=${keyword}`).then(({ data }) => {
     return data.data.map((post: Post) => {
       return post
     }) as Post[]
   })
 }
 const checkDuplicatedTitle = (title: string) => {
-  return instance.get(`/posts/duplicated?title=${title}`).then(({ data }) => {
+  return instance.get(`/posts?checkTitle=${title}`).then(({ data }) => {
     return data.data as boolean
   })
 }
 const downloadGLB = (fileName: string) => {
   return instance
-    .get(`/posts/download?fileName=${fileName}`, {
+    .get(`/posts?fileName=${fileName}`, {
       responseType: 'blob',
     })
     .then(({ data }) => data)
