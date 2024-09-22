@@ -1,30 +1,49 @@
-.main-background {
-  background-size: cover;
-  height: calc(95vh );
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+.main {
   position: relative;
-  color: #000000;
 }
-.blur {
-  background-color: #000;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-.search-bar {
-  max-width: 800px;
-  z-index: 1;
-}
-.main-background h1,
-.main-background p {
+#main-1 {
   text-align: center;
-  z-index: 1;
+  padding: 20% 0;
 }
-.main-background h1 {
-  padding-top: 200px;
+#main-1 h1 {
+  font-weight: bold;
+  font-size: 4em;
+  margin-top: 0;
+}
+#main-1 p {
+  font-size: 1.5em;
+  margin-bottom: 0;
+  color: #555;
+}
+#main-1 button {
+  font-size: 1.5em;
+  margin-top: 20px;
+  padding: 10px 20px;
+}
+#main-2 {
+  background-color: #f7f7f7;
+  padding: 15% 0;
+}
+.main .main-features {
+  display: flex;
+  gap: 40px;
+  width: 800px;
+  margin: 0 auto;
+  margin-bottom: 200px;
+  text-align: center;
+  align-items: center;
+}
+.main-features img {
+  width: 250px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+.main-features h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 0;
+}
+.main-features p {
+  font-size: 1.2em;
+  color: #555;
 }

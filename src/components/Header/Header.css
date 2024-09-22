@@ -3,10 +3,10 @@
   justify-content: space-between; /* 요소들을 양 끝에 배치 */
   align-items: center;
   padding: 10px;
-  background-color: #F4F7F9;
+  background-color: #f4f7f9;
   height: 60px;
-  border-top: #E3E8EC solid 1px;
-  border-bottom:#E3E8EC solid 1px;
+  border-top: #e3e8ec solid 1px;
+  border-bottom: #e3e8ec solid 1px;
 }
 
 #home-link {
@@ -19,9 +19,9 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  border: 1px solid #E3E8EC;
+  border: 1px solid #e3e8ec;
   border-radius: 8px;
-  background-color: #F4F7F9;
+  background-color: #f4f7f9;
   cursor: pointer;
 }
 
@@ -29,15 +29,15 @@
   padding: 9px 9px;
   margin-top: 12px;
   margin-left: 10px;
-  background-color: #F4F7F9;
-  border: 1px solid #E3E8EC;
+  background-color: #f4f7f9;
+  border: 1px solid #e3e8ec;
   border-radius: 4px;
   cursor: pointer;
   color: #000000;
 }
 
 .button:hover {
-  background-color: #E7EBEE;
+  background-color: #e7ebee;
 }
 
 .user-info {
@@ -80,10 +80,10 @@
   width: 40px;
   height: 40px;
   border-radius: 50%; /* 동그란 모양을 만듦 */
-  border: 2px solid #E3E8EC; /* 테두리 추가 */
+  border: 2px solid #e3e8ec; /* 테두리 추가 */
   object-fit: cover; /* 이미지를 동그라미 안에 맞춤 */
   margin-bottom: 5px;
-  margin-left:10px;
+  margin-left: 10px;
 }
 /* 검색바 컨테이너 */
 .search-bar-container {
@@ -104,11 +104,11 @@
 }
 
 /* 검색바 */
-.search-bar {
+.search-bar-container .search-bar {
   width: 100%;
   padding-left: 35px; /* 아이콘 공간을 확보하기 위해 패딩 추가 */
   height: 36px;
-  border: 1px solid #E3E8EC;
+  border: 1px solid #e3e8ec;
   border-radius: 8px;
   margin-bottom: 5px; /* 기본 margin-bottom 제거 */
   display: inline-block; /* 한 줄에 배치 */
