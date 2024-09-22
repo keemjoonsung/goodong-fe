@@ -84,6 +84,12 @@ const PostPage = () => {
     }
   }
 
+  const copyModel = () => {
+    // copy model id to clipboard
+    navigator.clipboard.writeText(postData?.models[0].fileName)
+    alert('Model Code copied to clipboard')
+  }
+
   useEffect(() => {
     const fetchData = async (postId: number) => {
       try {
@@ -122,8 +128,9 @@ const PostPage = () => {
               </div>
               <div className="buttons">
                 {postData.userId === user?.userId && (
-                  <Button onClick={editPost}>Upload New Version</Button>
+                  <Button onClick={editPost}>Add Version</Button>
                 )}
+                <Button onClick={copyModel}>{'<> '}Code</Button>
                 <Button
                   variant="outline-secondary"
                   className="post-star-button">
