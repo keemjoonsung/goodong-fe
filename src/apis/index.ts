@@ -26,24 +26,24 @@ const signup = (email: string, password: string, nickname: string) => {
   return instance.post('/auth/register', { email, password, nickname })
 }
 const checkDuplicatedNickname = (nickname: string) => {
-  return instance.get('/auth/duplicated', {
+  return instance.get('/auth/register/check-nickname', {
     params: {
       nickname: nickname,
     },
   })
 }
 const checkDuplicatedEmail = (email: string) => {
-  return instance.get('/auth/duplicated', {
+  return instance.get('/auth/register/check-email', {
     params: {
       email: email,
     },
   })
 }
 const checkPassword = (password: string) => {
-  return instance.post('/auth/valid', { password })
+  return instance.post('/auth/register/check-password', { password })
 }
 const checkToken = () => {
-  return instance.get('/auth').then(({ data }) => {
+  return instance.get('/auth/user-info').then(({ data }) => {
     const user = data.data
     return {
       userId: user.userId as number,
@@ -60,7 +60,7 @@ const changePassword = (userId: number, password: string) => {
 // post
 const getPostList = (userId: number) => {
   return instance.get(`/posts?userId=${userId}`).then(({ data }) => {
-    return data.data.map((post: Post) => {
+    return data.data.content.map((post: Post) => {
       return post
     }) as Post[]
   })
@@ -88,20 +88,20 @@ const updatePost = (postId: number, formData: FormData) => {
   })
 }
 const searchPost = (keyword: string) => {
-  return instance.get(`/posts?keyword=${keyword}`).then(({ data }) => {
-    return data.data.map((post: Post) => {
+  return instance.get(`/posts?query=${keyword}`).then(({ data }) => {
+    return data.data.content.map((post: Post) => {
       return post
     }) as Post[]
   })
 }
 const checkDuplicatedTitle = (title: string) => {
-  return instance.get(`/posts?checkTitle=${title}`).then(({ data }) => {
+  return instance.get(`/posts/check-title?title=${title}`).then(({ data }) => {
     return data.data as boolean
   })
 }
 const downloadGLB = (fileName: string) => {
   return instance
-    .get(`/posts?fileName=${fileName}`, {
+    .get(`/models?modelName=${fileName}`, {
       responseType: 'blob',
     })
     .then(({ data }) => data)
