@@ -17,6 +17,9 @@ const RepoList = ({ repoData }: { repoData: Post[] }) => {
                   {item.nickname}/{item.title}
                 </span>
               </Link>
+              <span className="repo-item-status">
+                {item.status === 'PUBLIC' ? 'Public' : 'Private'}
+              </span>
             </div>
             <div className="repo-item-tags">
               {item.tags.map((tag, index) => (

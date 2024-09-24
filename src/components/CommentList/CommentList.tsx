@@ -2,8 +2,10 @@ import { useState } from 'react'
 import './CommentList.css'
 import { Button, Form, Image } from 'react-bootstrap'
 import api from '../../apis'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Comment } from '../../types/post'
+import { Pencil, Trash } from 'react-bootstrap-icons'
+import useMainStore from '../../stores'
 
 const CommentList = ({
   postId,
@@ -13,6 +15,9 @@ const CommentList = ({
   comments: Comment[]
 }) => {
   const [input, setInput] = useState('')
+  const [editOpen, setEditOpen] = useState<number | null>(null)
+  const [editInput, setEditInput] = useState('')
+  const user = useMainStore(state => state.user)
   const navigate = useNavigate()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +40,36 @@ const CommentList = ({
     }
   }
 
+  const editComment = async (commentId: number) => {
+    if (editInput.trim() === '') {
+      return
+    }
+    try {
+      await api.comment.updateComment(postId, commentId, editInput)
+    } catch (e) {
+      console.log(e)
+      alert('Failed to update comment')
+    }
+    setEditOpen(null)
+    setEditInput('')
+    // refresh page
+    navigate(0)
+  }
+
+  const deleteComment = async (commentId: number) => {
+    if (confirm('Are you sure you want to delete this comment?')) {
+      try {
+        await api.comment.deleteComment(postId, commentId)
+        alert('Comment deleted')
+        // refresh page
+        navigate(0)
+      } catch (e) {
+        console.log(e)
+        alert('Failed to delete comment')
+      }
+    }
+  }
+
   return (
     <div className="comment-list">
       <h3>{comments.length} Comments</h3>
@@ -45,7 +80,7 @@ const CommentList = ({
         value={input}
         onChange={handleInputChange}></Form.Control>
       <div className="comment-button">
-        <Button onClick={submitComment} disabled={input.trim().length === ''}>
+        <Button onClick={submitComment} disabled={input.trim() === ''}>
           Add
         </Button>
       </div>
@@ -61,14 +96,53 @@ const CommentList = ({
               />
               <div className="comment-header-right">
                 <div className="comment-header-nickname">
-                  {comment.nickname}
+                  <Link to={`/${comment.userId}`}>{comment.nickname}</Link>
                 </div>
                 <div className="comment-header-date">
                   {new Date(comment.lastModifiedAt).toLocaleDateString()}
                 </div>
               </div>
+              {comment.userId === user?.userId && (
+                <div className="comment-header-actions">
+                  {editOpen === comment.commentId ? (
+                    <Button
+                      onClick={() => {
+                        editComment(comment.commentId)
+                      }}
+                      disabled={
+                        editInput.trim() === '' || editInput === comment.content
+                      }>
+                      Save
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => {
+                        setEditOpen(comment.commentId)
+                        setEditInput(comment.content)
+                      }}>
+                      <Pencil />
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => {
+                      deleteComment(comment.commentId)
+                    }}>
+                    <Trash />
+                  </Button>
+                </div>
+              )}
             </div>
-            <div className="comment-content">{comment.content}</div>
+            {editOpen === comment.commentId ? (
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editInput}
+                onChange={e => setEditInput(e.target.value)}></Form.Control>
+            ) : (
+              <div className="comment-content">{comment.content}</div>
+            )}
           </div>
         ))}
       </div>

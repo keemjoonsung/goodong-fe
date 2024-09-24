@@ -58,12 +58,17 @@ const changePassword = (userId: number, password: string) => {
 }
 
 // post
-const getPostList = (userId: number) => {
-  return instance.get(`/posts?userId=${userId}`).then(({ data }) => {
-    return data.data.content.map((post: Post) => {
-      return post
-    }) as Post[]
-  })
+const getPostList = (userId: number, page = 0) => {
+  return instance
+    .get(`/posts?userId=${userId}&page=${page}`)
+    .then(({ data }) => {
+      return {
+        content: data.data.content as Post[],
+        totalElements: data.data.totalElements as number,
+        totalPages: data.data.totalPages as number,
+        currentPage: data.data.number as number,
+      }
+    })
 }
 const addPost = (formData: FormData) => {
   return instance.post('/posts', formData, {
@@ -87,12 +92,17 @@ const updatePost = (postId: number, formData: FormData) => {
     },
   })
 }
-const searchPost = (keyword: string) => {
-  return instance.get(`/posts?query=${keyword}`).then(({ data }) => {
-    return data.data.content.map((post: Post) => {
-      return post
-    }) as Post[]
-  })
+const searchPost = (keyword: string, page = 0) => {
+  return instance
+    .get(`/posts?query=${keyword}&page=${page}`)
+    .then(({ data }) => {
+      return {
+        content: data.data.content as Post[],
+        totalElements: data.data.totalElements as number,
+        totalPages: data.data.totalPages as number,
+        currentPage: data.data.number as number,
+      }
+    })
 }
 const checkDuplicatedTitle = (title: string) => {
   return instance.get(`/posts/check-title?title=${title}`).then(({ data }) => {
@@ -124,9 +134,9 @@ const generateDescription = (formData: FormData) => {
 
 const like = (postId: number, target: boolean) => {
   if (target) {
-    return instance.post(`/likes/${postId}`)
+    return instance.post(`/likes?postId=${postId}`)
   } else {
-    return instance.delete(`/likes/${postId}`)
+    return instance.delete(`/likes?postId=${postId}`)
   }
 }
 
@@ -159,11 +169,13 @@ const follow = (userId: number, target: boolean) => {
 const addComment = (postId: number, content: string) => {
   return instance.post(`/comments?postId=${postId}`, { content })
 }
-const deleteComment = (commentId: number) => {
-  return instance.delete(`/comments?commentId=${commentId}`)
+const deleteComment = (postId: number, commentId: number) => {
+  return instance.delete(`/comments?postId=${postId}&commentId=${commentId}`)
 }
-const updateComment = (commentId: number, content: string) => {
-  return instance.put(`/comments?commentId=${commentId}`, { content })
+const updateComment = (postId: number, commentId: number, content: string) => {
+  return instance.patch(`/comments?postId=${postId}&commentId=${commentId}`, {
+    content,
+  })
 }
 
 const getUser = (userId: number) => {

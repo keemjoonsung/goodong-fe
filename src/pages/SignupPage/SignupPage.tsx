@@ -62,8 +62,7 @@ const SignupPage = () => {
     }
 
     try {
-      await api.auth.signup(email, password, nickname).then(response => {
-        alert(response.data)
+      await api.auth.signup(email, password, nickname).then(() => {
         navigate('/signin')
       })
     } catch (e) {

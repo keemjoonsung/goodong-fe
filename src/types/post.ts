@@ -14,6 +14,7 @@ export interface PostDetail extends Post {
   models: Model[]
   createdAt: string
   comments: Comment[]
+  liked: boolean
 }
 
 export interface Model {

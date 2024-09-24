@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import './UserPage.css'
 import api from '../../apis'
-import { Button, Form } from 'react-bootstrap'
+import { Button, Form, Pagination } from 'react-bootstrap'
 import RepoList from '../../components/RepoList/RepoList'
 import { User, UserDetail } from '../../types/user'
 import { Post } from '../../types/post'
@@ -12,6 +12,8 @@ import { Envelope, Person } from 'react-bootstrap-icons'
 const UserPage = () => {
   const user = useMainStore(state => state.user)
   const [repoData, setRepoData] = useState<Post[]>([])
+  const [totalPage, setTotalPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
   const [searchString, setSearchString] = useState('')
   const [currentUser, setCurrentUser] = useState<UserDetail | null>(null)
   const navigate = useNavigate()
@@ -43,6 +45,14 @@ const UserPage = () => {
     setRepoData(l)
   }
 
+  const fetchPostData = async (page: number) => {
+    if (!userID) return
+    const posts = await api.post.getPostList(parseInt(userID), page)
+    setRepoData(posts.content)
+    setTotalPage(posts.totalPages)
+    setCurrentPage(posts.currentPage)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,8 +68,7 @@ const UserPage = () => {
           navigate('/')
         }
 
-        const posts = await api.post.getPostList(parseInt(userID))
-        setRepoData(posts)
+        fetchPostData(0)
       } catch (error) {
         alert(error)
         navigate('/')
@@ -137,6 +146,20 @@ const UserPage = () => {
         {repoData.length ? (
           <div>
             <RepoList repoData={repoData} />
+            {totalPage > 1 && (
+              <Pagination>
+                {Array.from(Array(totalPage).keys()).map(i => {
+                  return (
+                    <Pagination.Item
+                      key={i}
+                      active={i === currentPage}
+                      onClick={() => fetchPostData(i)}>
+                      {i + 1}
+                    </Pagination.Item>
+                  )
+                })}
+              </Pagination>
+            )}
           </div>
         ) : (
           <div>

@@ -10,10 +10,10 @@ import api from '../../apis'
 import { Model, PostDetail } from '../../types/post'
 import CommentList from '../../components/CommentList/CommentList'
 import { Button, Image } from 'react-bootstrap'
-import { ClockHistory, Star } from 'react-bootstrap-icons'
+import { ClockHistory, Star, StarFill } from 'react-bootstrap-icons'
 import useMainStore from '../../stores'
 
-const Model = ({ url }: { url: string }) => {
+const Model3D = ({ url }: { url: string }) => {
   const [yPos, setYPos] = useState(0)
   const [xPos, setXPos] = useState(0)
   const gltf = useLoader(GLTFLoader, url) as any
@@ -84,10 +84,42 @@ const PostPage = () => {
     }
   }
 
-  const copyModel = () => {
+  const deletePost = async () => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      await api.post.deletePost(postId)
+      navigate(`/${user?.userId}`)
+    }
+  }
+
+  const copyModel = (fileName: string) => {
     // copy model id to clipboard
-    navigator.clipboard.writeText(postData?.models[0].fileName)
+    navigator.clipboard.writeText(fileName)
     alert('Model Code copied to clipboard')
+  }
+
+  const likeModel = async () => {
+    try {
+      await api.like.like(postId, true)
+      setPostData({
+        ...postData,
+        likes: postData.likes + 1,
+        liked: true,
+      })
+    } catch {
+      //
+    }
+  }
+  const unlikeModel = () => {
+    try {
+      api.like.like(postId, false)
+      setPostData({
+        ...postData,
+        likes: postData.likes - 1,
+        liked: false,
+      })
+    } catch {
+      //
+    }
   }
 
   useEffect(() => {
@@ -128,13 +160,20 @@ const PostPage = () => {
               </div>
               <div className="buttons">
                 {postData.userId === user?.userId && (
-                  <Button onClick={editPost}>Add Version</Button>
+                  <>
+                    <Button onClick={editPost}>Add Version</Button>
+                    <Button variant="outline-danger" onClick={deletePost}>
+                      Delete
+                    </Button>
+                  </>
                 )}
-                <Button onClick={copyModel}>{'<> '}Code</Button>
+
                 <Button
                   variant="outline-secondary"
-                  className="post-star-button">
-                  <Star /> {postData.likes}
+                  className="post-star-button"
+                  onClick={postData.liked ? unlikeModel : likeModel}>
+                  {postData.liked ? <StarFill fill="#FFD700" /> : <Star />}{' '}
+                  {postData.likes}
                 </Button>
               </div>
             </h1>
@@ -173,6 +212,12 @@ const PostPage = () => {
                   {postData.models[0].version === model.version && (
                     <span className="version">latest</span>
                   )}
+                  <Button
+                    onClick={() => {
+                      copyModel(model.fileName)
+                    }}>
+                    {'<> '}Code
+                  </Button>
                 </div>
               ))}
             </div>
@@ -184,7 +229,7 @@ const PostPage = () => {
                 <ambientLight intensity={1} />
                 <hemisphereLight intensity={5} />
                 <Suspense>
-                  <Model url={modelUrl} />
+                  <Model3D url={modelUrl} />
                 </Suspense>
               </Canvas>
             </div>

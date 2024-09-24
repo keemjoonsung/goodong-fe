@@ -29,7 +29,17 @@
   font-size: 18px;
   font-weight: bold;
 }
+.comment-header-nickname a {
+  color: #333;
+  text-decoration: none;
+}
 .comment-header-date {
   font-size: 12px;
   color: #333;
+}
+.comment-header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
