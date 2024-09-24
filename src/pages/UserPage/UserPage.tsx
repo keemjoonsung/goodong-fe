@@ -22,17 +22,27 @@ const UserPage = () => {
   const gotoEditProfile = () => {
     navigate('/editProfile')
   }
-  const follow = () => {
+  const follow = async () => {
     if (!userID || isNaN(parseInt(userID))) {
       return
     }
-    api.follow.follow(parseInt(userID), true)
+    await api.follow.follow(parseInt(userID), true)
+    setCurrentUser({
+      ...currentUser,
+      followed: true,
+      followerCount: currentUser?.followerCount + 1,
+    })
   }
-  const unFollow = () => {
+  const unFollow = async () => {
     if (!userID || isNaN(parseInt(userID))) {
       return
     }
-    api.follow.follow(parseInt(userID), false)
+    await api.follow.follow(parseInt(userID), false)
+    setCurrentUser({
+      ...currentUser,
+      followed: false,
+      followerCount: currentUser?.followerCount - 1,
+    })
   }
 
   const handleSubmit = () => {
@@ -101,10 +111,10 @@ const UserPage = () => {
           </div>
         ) : user ? (
           <div className="repo-left-item">
-            {true ? (
-              <Button onClick={follow}>Follow</Button>
-            ) : (
+            {currentUser?.followed ? (
               <Button onClick={unFollow}>UnFollow</Button>
+            ) : (
+              <Button onClick={follow}>Follow</Button>
             )}
           </div>
         ) : (
