@@ -45,7 +45,7 @@ const CommentList = ({
       return
     }
     try {
-      await api.comment.updateComment(postId, commentId, editInput)
+      await api.comment.updateComment(commentId, editInput)
     } catch (e) {
       console.log(e)
       alert('Failed to update comment')
@@ -59,7 +59,7 @@ const CommentList = ({
   const deleteComment = async (commentId: number) => {
     if (confirm('Are you sure you want to delete this comment?')) {
       try {
-        await api.comment.deleteComment(postId, commentId)
+        await api.comment.deleteComment(commentId)
         alert('Comment deleted')
         // refresh page
         navigate(0)

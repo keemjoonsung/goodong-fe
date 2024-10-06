@@ -81,10 +81,10 @@ const CreateRepositoryPage = () => {
     }
     const binaryFile = await fetch(dataUrl).then(res => res.blob())
     const formData = new FormData()
-    formData.append('file', binaryFile)
+    formData.append('filePng', binaryFile)
     const data = await api.post.generateDescription(formData)
     setTitle(data.title)
-    setContent(data.description)
+    setContent(data.content)
     setTag1(data.tags[0])
     setTag2(data.tags[1])
     setTag3(data.tags[2])
@@ -109,7 +109,7 @@ const CreateRepositoryPage = () => {
     formData.append('content', content)
     formData.append('tags', [tag1, tag2, tag3].join(','))
     formData.append('status', status)
-    formData.append('file', gltfFile) // 추가: glTF 파일 추가
+    formData.append('fileGlb', gltfFile) // 추가: glTF 파일 추가
 
     try {
       await api.post.addPost(formData)

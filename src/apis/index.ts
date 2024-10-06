@@ -43,7 +43,7 @@ const checkPassword = (password: string) => {
   return instance.post('/auth/register/check-password', { password })
 }
 const checkToken = () => {
-  return instance.get('/auth/user-info').then(({ data }) => {
+  return instance.get('/auth/check-token').then(({ data }) => {
     const user = data.data
     return {
       userId: user.userId as number,
@@ -53,8 +53,8 @@ const checkToken = () => {
     }
   })
 }
-const changePassword = (userId: number, password: string) => {
-  return instance.put(`/auth/password?userId=${userId}`, { password })
+const changePassword = (password: string) => {
+  return instance.put(`/auth/password`, { password })
 }
 
 // post
@@ -111,14 +111,14 @@ const checkDuplicatedTitle = (title: string) => {
 }
 const downloadGLB = (fileName: string) => {
   return instance
-    .get(`/models?modelName=${fileName}`, {
+    .get(`/posts/models?fileName=${fileName}`, {
       responseType: 'blob',
     })
     .then(({ data }) => data)
 }
 const generateDescription = (formData: FormData) => {
   return instance
-    .post('/ai', formData, {
+    .post('/posts/metadata', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -126,7 +126,7 @@ const generateDescription = (formData: FormData) => {
     .then(({ data }) => {
       return data.data as {
         title: string
-        description: string
+        content: string
         tags: string[]
       }
     })
@@ -169,11 +169,11 @@ const follow = (userId: number, target: boolean) => {
 const addComment = (postId: number, content: string) => {
   return instance.post(`/comments?postId=${postId}`, { content })
 }
-const deleteComment = (postId: number, commentId: number) => {
-  return instance.delete(`/comments?postId=${postId}&commentId=${commentId}`)
+const deleteComment = (commentId: number) => {
+  return instance.delete(`/comments/${commentId}`)
 }
-const updateComment = (postId: number, commentId: number, content: string) => {
-  return instance.patch(`/comments?postId=${postId}&commentId=${commentId}`, {
+const updateComment = (commentId: number, content: string) => {
+  return instance.patch(`/comments/${commentId}`, {
     content,
   })
 }
@@ -183,15 +183,14 @@ const getUser = (userId: number) => {
     return data.data as UserDetail
   })
 }
-const deleteUser = (userId: number) => {
-  return instance.delete(`/users/${userId}`)
+const deleteUser = () => {
+  return instance.delete(`/auth/withdraw`)
 }
 const updateUser = (
-  userId: number,
   nickname: string,
   profileImageUrl: string,
 ) => {
-  return instance.patch(`/users/${userId}`, {
+  return instance.patch(`/users`, {
     nickname: nickname,
     profileImageUrl: profileImageUrl,
   })
