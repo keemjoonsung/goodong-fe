@@ -140,22 +140,28 @@ const like = (postId: number, target: boolean) => {
   }
 }
 
-const getFollowingList = (userId: number) => {
+const getFollowingList = (userId: number, page = 0) => {
   return instance
-    .get(`/follows?userId=${userId}&type=FOLLOWING`)
+    .get(`/follows?userId=${userId}&type=FOLLOWING&page=${page}`)
     .then(({ data }) => {
-      return data.data.map((user: User) => {
-        return user as User
-      })
+      return {
+        content: data.data.content as User[],
+        totalElements: data.data.totalElements as number,
+        totalPages: data.data.totalPages as number,
+        currentPage: data.data.number as number,
+      }
     })
 }
-const getFollowerList = (userId: number) => {
+const getFollowerList = (userId: number, page = 0) => {
   return instance
-    .get(`/follows?userId=${userId}&type=FOLLOWER`)
+    .get(`/follows?userId=${userId}&type=FOLLOWER&page=${page}`)
     .then(({ data }) => {
-      return data.data.map((user: User) => {
-        return user as User
-      })
+      return {
+        content: data.data.content as User[],
+        totalElements: data.data.totalElements as number,
+        totalPages: data.data.totalPages as number,
+        currentPage: data.data.number as number,
+      }
     })
 }
 const follow = (userId: number, target: boolean) => {
@@ -186,10 +192,7 @@ const getUser = (userId: number) => {
 const deleteUser = () => {
   return instance.delete(`/auth/withdraw`)
 }
-const updateUser = (
-  nickname: string,
-  profileImageUrl: string,
-) => {
+const updateUser = (nickname: string, profileImageUrl: string) => {
   return instance.patch(`/users`, {
     nickname: nickname,
     profileImageUrl: profileImageUrl,

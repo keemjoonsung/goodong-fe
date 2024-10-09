@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import './FollowerPage.css'
 import api from '../../apis'
-import { Button, Form } from 'react-bootstrap'
+import { Button, Form, Pagination } from 'react-bootstrap'
 import { User, UserDetail } from '../../types/user'
 import { Post } from '../../types/post'
 import useMainStore from '../../stores'
@@ -14,9 +14,18 @@ const FollowerPage = () => {
   const [currentUser, setCurrentUser] = useState<UserDetail | null>(null)
   const navigate = useNavigate()
   const { userID } = useParams()
+  const [totalPage, setTotalPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
 
   const gotoEditProfile = () => {
     navigate('/editProfile')
+  }
+  const fetchFollowerData = async (page: number) => {
+    if (!userID) return
+    const users = await api.follow.getFollowerList(parseInt(userID), page)
+    setFollowerList(users.content)
+    setTotalPage(users.totalPages)
+    setCurrentPage(users.currentPage)
   }
 
   useEffect(() => {
@@ -34,8 +43,7 @@ const FollowerPage = () => {
           navigate('/')
         }
 
-        const users = await api.follow.getFollowerList(parseInt(userID))
-        setFollowerList(users)
+        fetchFollowerData(0)
       } catch (error) {
         alert(error)
         navigate('/')
@@ -86,6 +94,20 @@ const FollowerPage = () => {
         {followerList.length ? (
           <div>
             <UserList userList={followerList} />
+            {totalPage > 1 && (
+              <Pagination>
+                {Array.from(Array(totalPage).keys()).map(i => {
+                  return (
+                    <Pagination.Item
+                      key={i}
+                      active={i === currentPage}
+                      onClick={() => fetchFollowerData(i)}>
+                      {i + 1}
+                    </Pagination.Item>
+                  )
+                })}
+              </Pagination>
+            )}
           </div>
         ) : (
           <div>
