@@ -2,11 +2,12 @@ import React, { Suspense, useEffect, useMemo, useState } from 'react'
 import './PostEditPage.css'
 import api from '../../apis'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Form, InputGroup } from 'react-bootstrap'
+import { Button, Form, InputGroup } from 'react-bootstrap'
 import useMainStore from '../../stores'
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
 import { PostDetail } from '../../types/post'
+import { Magic } from 'react-bootstrap-icons'
 
 const Model = ({ glbData }: { glbData: any }) => {
   const { scene } = useGLTF(glbData) as any
@@ -24,6 +25,7 @@ const PostEditPage = () => {
   const [tag3, setTag3] = useState('')
   const [status, setStatus] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC')
   const [content, setContent] = useState('')
+  const [isChanged, setIsChanged] = useState(false)
   const [gltfFile, setGltfFile] = useState<any>(null) // 추가: glTF 파일 상태
   const [glbData, setGlbData] = useState<any>(null)
   const params = useParams()
@@ -50,10 +52,15 @@ const PostEditPage = () => {
     if (postId) fetchData(postId)
   }, [postId])
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value)
+    setIsChanged(true)
+  }
   const handleContentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setContent(event.target.value)
+    setIsChanged(true)
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,14 +75,33 @@ const PostEditPage = () => {
         })
         const url = URL.createObjectURL(blob)
         setGlbData(url)
+        setIsChanged(true)
       }
       reader.readAsArrayBuffer(file)
     }
   }
 
+  const generateDescription = async () => {
+    const canvas = document.querySelector('canvas')
+    const dataUrl = canvas?.toDataURL('image/jpeg')
+    if (!dataUrl) {
+      alert('Fail to capture image')
+      return
+    }
+    const binaryFile = await fetch(dataUrl).then(res => res.blob())
+    const formData = new FormData()
+    formData.append('filePng', binaryFile)
+    const data = await api.post.generateDescription(formData)
+    setTitle(data.title)
+    setContent(data.content)
+    setTag1(data.tags[0])
+    setTag2(data.tags[1])
+    setTag3(data.tags[2])
+  }
+
   const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!commitMessage || !title || !content || !tag1 || !gltfFile) {
+    if (!commitMessage || !title || !content || !tag1) {
       alert('필수 입력값을 모두 입력해주세요.')
       return
     }
@@ -93,7 +119,7 @@ const PostEditPage = () => {
     formData.append('content', content)
     formData.append('tags', [tag1, tag2, tag3].join(','))
     formData.append('status', status)
-    formData.append('file', gltfFile) // 추가: glTF 파일 추가
+    if (gltfFile) formData.append('file', gltfFile)
 
     try {
       await api.post.updatePost(postId, formData)
@@ -120,18 +146,23 @@ const PostEditPage = () => {
           />
         </div>
         {glbData && (
-          <div className="model-preview">
-            <Canvas>
-              <Suspense fallback={null}>
-                {/* add light */}
-                <ambientLight intensity={5} />
-                <pointLight position={[10, 10, 10]} />
-                {/* <Environment preset="sunset" /> */}
-                <Model glbData={glbData} />
-                <OrbitControls />
-              </Suspense>
-            </Canvas>
-          </div>
+          <>
+            <div className="model-preview">
+              <Canvas>
+                <Suspense fallback={null}>
+                  {/* add light */}
+                  <ambientLight intensity={5} />
+                  <pointLight position={[10, 10, 10]} />
+                  {/* <Environment preset="sunset" /> */}
+                  <Model glbData={glbData} />
+                  <OrbitControls />
+                </Suspense>
+              </Canvas>
+            </div>
+            <Button onClick={generateDescription}>
+              <Magic /> Generate Description
+            </Button>
+          </>
         )}
 
         <hr />
@@ -151,7 +182,7 @@ const PostEditPage = () => {
             type="text"
             placeholder="Repository name"
             value={title}
-            onChange={e => setTitle(e.target.value)}></Form.Control>
+            onChange={handleTitleChange}></Form.Control>
         </div>
         <div className="form-group">
           <Form.Label>Description</Form.Label>
@@ -170,19 +201,28 @@ const PostEditPage = () => {
               type="text"
               placeholder="Tag1"
               value={tag1}
-              onChange={e => setTag1(e.target.value)}></Form.Control>
+              onChange={e => {
+                setTag1(e.target.value)
+                setIsChanged(true)
+              }}></Form.Control>
             <Form.Control
               className="search-bar"
               type="text"
               placeholder="Tag2"
               value={tag2}
-              onChange={e => setTag2(e.target.value)}></Form.Control>
+              onChange={e => {
+                setTag2(e.target.value)
+                setIsChanged(true)
+              }}></Form.Control>
             <Form.Control
               className="search-bar"
               type="text"
               placeholder="Tag3"
               value={tag3}
-              onChange={e => setTag3(e.target.value)}></Form.Control>
+              onChange={e => {
+                setTag3(e.target.value)
+                setIsChanged(true)
+              }}></Form.Control>
           </InputGroup>
         </div>
         <hr />
@@ -194,7 +234,10 @@ const PostEditPage = () => {
             id="public"
             value="PUBLIC"
             checked={status === 'PUBLIC'}
-            onChange={() => setStatus('PUBLIC')}
+            onChange={() => {
+              setStatus('PUBLIC')
+              setIsChanged(true)
+            }}
           />
           <Form.Check
             type="radio"
@@ -203,12 +246,17 @@ const PostEditPage = () => {
             id="private"
             value="PRIVATE"
             checked={status === 'PRIVATE'}
-            onChange={() => setStatus('PRIVATE')}
+            onChange={() => {
+              setStatus('PRIVATE')
+              setIsChanged(true)
+            }}
           />
         </div>
         <hr />
 
-        <input type="submit" className="btn-submit" value="등록" />
+        <Button type="submit" disabled={!commitMessage}>
+          Submit
+        </Button>
       </form>
     </div>
   )
