@@ -60,27 +60,27 @@ const PostPage = () => {
     navigate(`/${postData?.userId}/${postId}/edit`)
   }
 
-  const loadModel = async (m: Model) => {
-    try {
-      const fileName = m.fileName
-      const model = await api.post.downloadGLB(fileName)
-      const blob = new Blob([model], { type: 'model/gltf-binary' })
-      if (blob.size < 1) {
-        throw new Error('Model size is too small')
-      }
-      const url = URL.createObjectURL(blob)
-      setModelUrl(url)
-    } catch (e) {
-      console.log(e)
-      setModelUrl('')
-    }
-  }
+  // const loadModel = async (m: Model) => {
+  //   try {
+  //     const fileName = m.fileName
+  //     const model = await api.post.downloadGLB(fileName)
+  //     const blob = new Blob([model], { type: 'model/gltf-binary' })
+  //     if (blob.size < 1) {
+  //       throw new Error('Model size is too small')
+  //     }
+  //     const url = URL.createObjectURL(blob)
+  //     setModelUrl(url)
+  //   } catch (e) {
+  //     console.log(e)
+  //     setModelUrl('')
+  //   }
+  // }
 
   const selectModel = async (version: number) => {
     setSelectedModel(version)
     const model = postData?.models.find(model => model.version === version)
     if (model) {
-      loadModel(model)
+      setModelUrl(model.url)
     }
   }
 
@@ -129,7 +129,7 @@ const PostPage = () => {
         detail.models.reverse()
         setPostData(detail)
         setSelectedModel(detail.models[0].version)
-        loadModel(detail.models[0])
+        setModelUrl(detail.models[0].url)
       } catch (error) {
         console.error(error)
       }

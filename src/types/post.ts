@@ -19,7 +19,7 @@ export interface PostDetail extends Post {
 
 export interface Model {
   version: number
-  fileName: string
+  url: string
   commitMessage: string
 }
 
