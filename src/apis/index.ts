@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { User, UserDetail } from '../types/user'
+import { User, UserContribution, UserDetail } from '../types/user'
 import { Post, PostDetail } from '../types/post'
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL as string
@@ -189,6 +189,11 @@ const getUser = (userId: number) => {
     return data.data as UserDetail
   })
 }
+const getUserContributions = (userId: number) => {
+  return instance.get(`/users/${userId}/contributions`).then(({ data }) => {
+    return data.data.contributions as UserContribution[]
+  })
+}
 const deleteUser = () => {
   return instance.delete(`/auth/withdraw`)
 }
@@ -237,6 +242,7 @@ const api = Object.freeze({
     getUser,
     deleteUser,
     updateUser,
+    getUserContributions,
   },
 })
 

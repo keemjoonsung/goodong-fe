@@ -1,12 +1,13 @@
 .repo-list {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 20px;
   display: flex;
   gap: 40px;
 }
 .repo-left {
   width: 200px;
+  flex-shrink: 0;
 }
 .repo-left .repo-left-item {
   margin-bottom: 20px;
@@ -28,6 +29,7 @@
 }
 .repo-right {
   flex: 1;
+  overflow: hidden;
 }
 
 .divider {
@@ -54,4 +56,20 @@
 
 .btn-create:hover {
   background-color: #22863a;
+}
+
+.contributions {
+  margin-top: 40px;
+}
+.contributions h5 {
+  font-size: 16px;
+  font-weight: 500;
+}
+.contributions .contribution-box {
+  /* border: 1px solid #e1e4e8;
+  border-radius: 10px;
+  padding: 20px 0; */
+}
+.contributions ._calendar_1dwvo_19 {
+  padding: 0 !important;
 }

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import './UserPage.css'
 import api from '../../apis'
 import { Button, Form, Pagination } from 'react-bootstrap'
 import RepoList from '../../components/RepoList/RepoList'
-import { User, UserDetail } from '../../types/user'
+import { User, UserContribution, UserDetail } from '../../types/user'
 import { Post } from '../../types/post'
 import useMainStore from '../../stores'
 import { Envelope, Person } from 'react-bootstrap-icons'
+import { ContributionCalendar } from 'react-contribution-calendar'
 
 const UserPage = () => {
   const user = useMainStore(state => state.user)
@@ -16,6 +17,10 @@ const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(0)
   const [searchString, setSearchString] = useState('')
   const [currentUser, setCurrentUser] = useState<UserDetail | null>(null)
+  const [contributions, setContributions] = useState<UserContribution[]>([])
+  const contributionCount = useMemo(() => {
+    return contributions.reduce((acc, cur) => acc + cur.count, 0)
+  }, [contributions])
   const navigate = useNavigate()
   const { userID } = useParams()
 
@@ -73,6 +78,10 @@ const UserPage = () => {
         try {
           const user = await api.user.getUser(parseInt(userID))
           setCurrentUser(user)
+          const userContributions = await api.user.getUserContributions(
+            parseInt(userID),
+          )
+          setContributions(userContributions)
         } catch (error) {
           alert('Cannot find user')
           navigate('/')
@@ -177,6 +186,24 @@ const UserPage = () => {
             <br />
           </div>
         )}
+        <div className="contributions">
+          <h5>{contributionCount} contributions in the last year</h5>
+          <div className="contribution-box">
+            <ContributionCalendar
+              start={'2024-01-01'}
+              end={'2024-12-31'}
+              cx={10}
+              cy={10}
+              cr={2}
+              includeBoundary
+              data={contributions.map(i => ({
+                [i.date]: {
+                  level: i.count,
+                },
+              }))}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

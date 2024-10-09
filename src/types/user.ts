@@ -8,7 +8,6 @@ export interface UserDetail extends User {
   followerCount: number
   followingCount: number
   followed: boolean
-  userContributions: UserContribution[]
 }
 
 export interface UserContribution {

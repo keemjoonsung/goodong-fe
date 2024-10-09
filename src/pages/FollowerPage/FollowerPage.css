@@ -1,12 +1,13 @@
 .repo-list {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 20px;
   display: flex;
   gap: 40px;
 }
 .repo-left {
   width: 200px;
+  flex-shrink: 0;
 }
 .repo-left .repo-left-item {
   margin-bottom: 20px;
@@ -28,6 +29,7 @@
 }
 .repo-right {
   flex: 1;
+  overflow: hidden;
 }
 
 .divider {
