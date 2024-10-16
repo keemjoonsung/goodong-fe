@@ -25,7 +25,7 @@ const UserPage = () => {
   const { userID } = useParams()
 
   const gotoEditProfile = () => {
-    navigate('/editProfile')
+    navigate(`/${userID}/edit`)
   }
   const follow = async () => {
     if (!userID || isNaN(parseInt(userID))) {

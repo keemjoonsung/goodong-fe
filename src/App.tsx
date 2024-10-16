@@ -49,7 +49,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/signin" element={<SigninPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/profile/edit" element={<ProfileEditPage />} />
+        <Route path="/:userID/edit" element={<ProfileEditPage />} />
         <Route path="/:userID" element={<UserPage />} />
         <Route path="/:userID/follower" element={<FollowerPage />} />
         <Route path="/:userID/following" element={<FollowingPage />} />

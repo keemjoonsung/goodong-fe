@@ -197,10 +197,11 @@ const getUserContributions = (userId: number) => {
 const deleteUser = () => {
   return instance.delete(`/auth/withdraw`)
 }
-const updateUser = (nickname: string, profileImageUrl: string) => {
-  return instance.patch(`/users`, {
-    nickname: nickname,
-    profileImageUrl: profileImageUrl,
+const updateUser = (formData: FormData) => {
+  return instance.patch(`/users`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   })
 }
 

@@ -1,0 +1,23 @@
+.edit-profile {
+  width: 400px;
+  padding-top: 40px;
+  margin: 0 auto;
+}
+.edit-profile-form {
+}
+.edit-profile-form .form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.edit-profile-form img {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  display: block;
+  margin: 10px auto;
+  object-fit: cover;
+}
+.edit-profile-form form {
+  margin-bottom: 40px;
+}
