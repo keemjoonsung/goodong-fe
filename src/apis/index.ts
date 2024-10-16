@@ -56,6 +56,9 @@ const checkToken = () => {
 const changePassword = (password: string) => {
   return instance.put(`/auth/password`, { password })
 }
+const withdraw = () => {
+  return instance.delete(`/auth/withdraw`)
+}
 
 // post
 const getPostList = (userId: number, page = 0) => {
@@ -214,6 +217,7 @@ const api = Object.freeze({
     checkPassword,
     checkToken,
     changePassword,
+    withdraw,
   },
   post: {
     getPostList,

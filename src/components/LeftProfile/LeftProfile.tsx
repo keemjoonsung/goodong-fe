@@ -38,6 +38,14 @@ const LeftProfile = ({
     })
   }
 
+  const withdraw = async () => {
+    if (confirm('Are you sure you want to withdraw?')) {
+      await api.auth.withdraw()
+      localStorage.removeItem('jwtToken')
+      location.href = '/'
+    }
+  }
+
   return (
     <div className="repo-left">
       <div className="repo-left-item">
@@ -82,6 +90,13 @@ const LeftProfile = ({
         </span>
       </div>
       <div className="divider"></div>
+      {targetUser.userId === user?.userId && (
+        <div className="repo-left-item">
+          <span className="repo-left-item-link withdraw" onClick={withdraw}>
+            withdrawal
+          </span>
+        </div>
+      )}
     </div>
   )
 }
