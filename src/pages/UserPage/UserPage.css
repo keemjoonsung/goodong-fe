@@ -5,28 +5,7 @@
   display: flex;
   gap: 40px;
 }
-.repo-left {
-  width: 200px;
-  flex-shrink: 0;
-}
-.repo-left .repo-left-item {
-  margin-bottom: 20px;
-}
-.repo-left-item-link {
-  font-size: 14px;
-  cursor: pointer;
-}
-.repo-left-item-link:hover {
-  text-decoration: underline;
-}
-.repo-left img {
-  width: 100%;
-  border-radius: 50%;
-  border: 1px solid #e1e4e8;
-}
-.repo-left button {
-  width: 100%;
-}
+
 .repo-right {
   flex: 1;
   overflow: hidden;

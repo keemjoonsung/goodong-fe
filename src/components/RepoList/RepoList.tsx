@@ -33,7 +33,7 @@ const RepoList = ({ repoData }: { repoData: Post[] }) => {
               <Star /> <span>{item.likes}</span>
             </div>
           </div>
-          <div className="repo-item-right">
+          {/* <div className="repo-item-right">
             <img
               src={
                 item.profileImage ??
@@ -41,7 +41,7 @@ const RepoList = ({ repoData }: { repoData: Post[] }) => {
               }
               alt={`${item.title}_thumb`}
             />
-          </div>
+          </div> */}
         </div>
       ))}
     </div>

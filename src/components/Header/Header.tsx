@@ -5,7 +5,14 @@ import './Header.css'
 import { Link, useNavigate } from 'react-router-dom'
 import useMainStore from '../../stores'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faUser, faSignOutAlt, faSignInAlt, faPlusCircle, faBars } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSearch,
+  faUser,
+  faSignOutAlt,
+  faSignInAlt,
+  faPlusCircle,
+  faBars,
+} from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -35,14 +42,14 @@ const Header = () => {
         <button className="icon-button">
           <FontAwesomeIcon icon={faBars} />
         </button>
-  
+
         {/* 로고 */}
         <Link to={'/'} id={'home-link'}>
           <Image src={'/img/Logo.png'} id={'goodong-logo'} />
           <span id={'goodong-logo-letter'}>GOODONG</span>
         </Link>
       </div>
-  
+
       <div id={'right-section'}>
         {!isLogin && (
           <span id={'regi-span'}>
@@ -61,39 +68,35 @@ const Header = () => {
           </span>
         )}
         {isLogin && user.nickname !== '' && (
-
           <span id={'user-span'}>
-              <Form.Group className="search-bar-container">
-                <span className="search-icon">
-                  <FontAwesomeIcon icon={faSearch} />
-                </span>
-                <Form.Control
-                  className="search-bar"
-                  type="text"
-                  placeholder="search"
-                  value={searchString}
-                  onChange={e => setSearchString(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-                />
+            <Form.Group className="search-bar-container">
+              <span className="search-icon">
+                <FontAwesomeIcon icon={faSearch} />
+              </span>
+              <Form.Control
+                className="search-bar"
+                type="text"
+                placeholder="search"
+                value={searchString}
+                onChange={e => setSearchString(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+              />
             </Form.Group>
             <Link to={`/${user.userId}`}>
-              <button className={'button icon-button'} id={'my-repository-button'}>
+              <button
+                className={'button icon-button'}
+                id={'my-repository-button'}>
                 <FontAwesomeIcon icon={faUser} />
               </button>
             </Link>
             <Link to={'/'}>
-              <button className={'button icon-button'} id={'logout-button'} onClick={logout}>
+              <button
+                className={'button icon-button'}
+                id={'logout-button'}
+                onClick={logout}>
                 <FontAwesomeIcon icon={faSignOutAlt} />
               </button>
             </Link>
-            <span className={'profile-image'}>
-                  <img
-                    src={
-                      'https://avatars.githubusercontent.com/u/42940044?v=4'
-                    }
-                    alt="profile"
-                  />
-                </span>
           </span>
         )}
       </div>

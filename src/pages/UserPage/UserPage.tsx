@@ -9,6 +9,7 @@ import { Post } from '../../types/post'
 import useMainStore from '../../stores'
 import { Envelope, Person } from 'react-bootstrap-icons'
 import { ContributionCalendar } from 'react-contribution-calendar'
+import LeftProfile from '../../components/LeftProfile/LeftProfile'
 
 const UserPage = () => {
   const user = useMainStore(state => state.user)
@@ -23,32 +24,6 @@ const UserPage = () => {
   }, [contributions])
   const navigate = useNavigate()
   const { userID } = useParams()
-
-  const gotoEditProfile = () => {
-    navigate(`/${userID}/edit`)
-  }
-  const follow = async () => {
-    if (!userID || isNaN(parseInt(userID))) {
-      return
-    }
-    await api.follow.follow(parseInt(userID), true)
-    setCurrentUser({
-      ...currentUser,
-      followed: true,
-      followerCount: currentUser?.followerCount + 1,
-    })
-  }
-  const unFollow = async () => {
-    if (!userID || isNaN(parseInt(userID))) {
-      return
-    }
-    await api.follow.follow(parseInt(userID), false)
-    setCurrentUser({
-      ...currentUser,
-      followed: false,
-      followerCount: currentUser?.followerCount - 1,
-    })
-  }
 
   const handleSubmit = () => {
     if (!searchString) {
@@ -98,56 +73,9 @@ const UserPage = () => {
 
   return (
     <div className="repo-list">
-      <div className="repo-left">
-        <div className="repo-left-item">
-          <img
-            src={
-              currentUser?.profileImage ??
-              'https://avatars.githubusercontent.com/u/42940044?v=4'
-            }
-            alt="profile"
-          />
-        </div>
-        <div className="repo-left-item">
-          <Person size={20} /> {currentUser?.nickname}
-        </div>
-        <div className="repo-left-item">
-          <Envelope size={20} /> {currentUser?.email}
-        </div>
-        {currentUser?.userId === user?.userId ? (
-          <div className="repo-left-item">
-            <Button onClick={gotoEditProfile}>Edit Profile</Button>
-          </div>
-        ) : user ? (
-          <div className="repo-left-item">
-            {currentUser?.followed ? (
-              <Button onClick={unFollow}>UnFollow</Button>
-            ) : (
-              <Button onClick={follow}>Follow</Button>
-            )}
-          </div>
-        ) : (
-          <></>
-        )}
-        <div className="repo-left-item">
-          <span
-            className="repo-left-item-link"
-            onClick={() => {
-              navigate(`/${userID}/follower`)
-            }}>
-            {currentUser?.followerCount} Follwers
-          </span>
-          {' / '}
-          <span
-            className="repo-left-item-link"
-            onClick={() => {
-              navigate(`/${userID}/following`)
-            }}>
-            {currentUser?.followingCount} Follwings
-          </span>
-        </div>
-        <div className="divider"></div>
-      </div>
+      {currentUser && (
+        <LeftProfile targetUser={currentUser} setTargetUser={setCurrentUser} />
+      )}
       <div className="repo-right">
         <div className={'repo-header'}>
           <Form.Control

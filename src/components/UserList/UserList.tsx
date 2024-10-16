@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import './UserList.css'
 import { User } from '../../types/user'
+import { Image } from 'react-bootstrap'
 
 const UserList = ({ userList }: { userList: User[] }) => {
   return (
@@ -16,13 +17,7 @@ const UserList = ({ userList }: { userList: User[] }) => {
             <div className="user-item-description">{item.email}</div>
           </div>
           <div className="user-item-right">
-            <img
-              src={
-                item.profileImage ??
-                'https://avatars.githubusercontent.com/u/42940044?v=4'
-              }
-              alt={`${item.nickname}_thumb`}
-            />
+            <Image src={item.profileImage} roundedCircle />
           </div>
         </div>
       ))}
