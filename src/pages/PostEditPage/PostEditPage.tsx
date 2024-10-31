@@ -119,7 +119,7 @@ const PostEditPage = () => {
     formData.append('content', content)
     formData.append('tags', [tag1, tag2, tag3].join(','))
     formData.append('status', status)
-    if (gltfFile) formData.append('file', gltfFile)
+    if (gltfFile) formData.append('fileGlb', gltfFile)
 
     try {
       await api.post.updatePost(postId, formData)
