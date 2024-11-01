@@ -22,6 +22,13 @@ const UserPage = () => {
   const contributionCount = useMemo(() => {
     return contributions.reduce((acc, cur) => acc + cur.count, 0)
   }, [contributions])
+  const contributionData = useMemo(() => {
+    return contributions.map(i => ({
+      [i.date]: {
+        level: Math.min(i.count, 4),
+      },
+    }))
+  }, [contributions])
   const navigate = useNavigate()
   const { userID } = useParams()
 
@@ -124,11 +131,7 @@ const UserPage = () => {
               cy={10}
               cr={2}
               includeBoundary
-              data={contributions.map(i => ({
-                [i.date]: {
-                  level: i.count,
-                },
-              }))}
+              data={contributionData}
             />
           </div>
         </div>
