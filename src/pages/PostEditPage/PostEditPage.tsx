@@ -148,7 +148,7 @@ const PostEditPage = () => {
         {glbData && (
           <>
             <div className="model-preview">
-              <Canvas>
+              <Canvas gl={{ preserveDrawingBuffer: true }}>
                 <Suspense fallback={null}>
                   {/* add light */}
                   <ambientLight intensity={5} />
